@@ -1,11 +1,32 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 0;
 }
 
+button {
+    border-radius: 10px;
+    font-size: 5vh;
+}
+
 #calculator {
     width: 50%;
     height: 90vh;
-    background-color: red;
+    background-color: darkblue;
     margin: 5vh auto 5vh auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 3px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#display {
+    background-color: white;
+    border-radius: 10px;
+    margin: 3px;
 }
