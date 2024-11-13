@@ -54,26 +54,20 @@ const addDisplay = () => new CalcButton(container, 'display', 'div', 'display', 
 const addClear = () => new CalcButton(container, 'C', 'button', 'canc', 4, 2).createElement();
 const addAllClear = () => new CalcButton(container, 'AC', 'button', 'canc', 5, 2).createElement();
 const addComma = () => new CalcButton(container, '.', 'button', 'comma', 3, 5).createElement();
-const addOperations = () => {
-    const operations = ['*', '/', '+', '-'];
-    return operations.map((op, index) => {
-	const col = 4 + index % 2;
-	const row = Math.floor(index / 2) + 3;
-	return new CalcButton(container, op, 'button', 'op', col, row).createElement()
-    });
-};
+const addOperations = () => createSeveralButtons(['*', '/', '+', '-'], 4, 3, 2, 2, 'op');
 const addResult = () => new CalcButton(container, '=', 'button', 'result', '4/-1', 5).createElement();
-const addNumbers = () => {
-    const nums = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
-    return nums.map((num, index) => {
-	let col = 1 + index % 3;
-	if (num === 0) {
-	    col = '1/3';
+const addNumbers = () => createSeveralButtons([7, 8, 9, 4, 5, 6, 1, 2, 3, 0], 1, 2, 3, 3, 'number');
+const createSeveralButtons = (arr, initCol, initRow, numCols, numRows, className) => {
+    return arr.map((item, index) => {
+	let col = initCol + (index % numCols);
+	//Exception made for the number 0 that takes two places
+	if (item === 0) {
+	    col = `${initCol}/${initCol + 2}`;
 	}
-	const row = Math.floor(index / 3) + 2;
-	return new CalcButton(container, num, 'button', 'number', col, row).createElement();
+	const row = initRow + Math.floor(index / numRows);
+	return new CalcButton(container, item, 'button', className, col, row).createElement();
     });
-};
+}
 
 //Buttons
 const display = addDisplay();
