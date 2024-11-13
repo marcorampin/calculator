@@ -10,6 +10,7 @@ body {
 button {
     border-radius: 10px;
     font-size: 5vh;
+    margin: 5px;
 }
 
 #calculator {
@@ -20,7 +21,7 @@ button {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(5, 1fr);
-    gap: 3px;
+    gap: 5px;
     padding: 10px;
     border-radius: 5px;
 }
@@ -28,5 +29,5 @@ button {
 #display {
     background-color: white;
     border-radius: 10px;
-    margin: 3px;
+    margin: 5px;
 }

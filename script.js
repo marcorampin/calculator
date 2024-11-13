@@ -63,6 +63,17 @@ const addOperations = () => {
     });
 };
 const addResult = () => new CalcButton(container, '=', 'button', 'result', '4/-1', 5).createElement();
+const addNumbers = () => {
+    const nums = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
+    return nums.map((num, index) => {
+	let col = 1 + index % 3;
+	if (num === 0) {
+	    col = '1/3';
+	}
+	const row = Math.floor(index / 3) + 2;
+	return new CalcButton(container, num, 'button', 'number', col, row).createElement();
+    });
+};
 
 //Buttons
 const display = addDisplay();
@@ -71,3 +82,4 @@ const allClear = addAllClear();
 const comma = addComma();
 const operations = addOperations();
 const result = addResult();
+const numbers = addNumbers();
