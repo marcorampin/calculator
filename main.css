@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    font-family: monospace;
 }
 
 body {
@@ -14,7 +15,7 @@ button {
 }
 
 #calculator {
-    width: 50%;
+    width: max(300px, 50%);
     height: 90vh;
     background-color: darkblue;
     margin: 5vh auto 5vh auto;
@@ -30,4 +31,9 @@ button {
     background-color: white;
     border-radius: 10px;
     margin: 5px;
+    font-size:7vh;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding-right: 5%;
 }

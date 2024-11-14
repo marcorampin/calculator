@@ -6,18 +6,19 @@ const divide = (a, b) => a / b;
 
 //Manage the operator to get the right operation
 const operate = (num1, op, num2) => {
+    [num1, num2] = [parseFloat(num1), parseFloat(num2)];
     switch (op) {
 	case '+':
-	    add(num1, num2);
+	    return add(num1, num2);
 	    break;
 	case '-':
-	    substract(num1, num2);
+	    return substract(num1, num2);
 	    break;
 	case '*':
-	    multiply(num1, num2);
+	    return multiply(num1, num2);
 	    break;
 	case '/':
-	    divide(num1, num2);
+	    return divide(num1, num2);
 	    break;
     }
 }
@@ -48,15 +49,15 @@ class CalcButton {
 
 //Calculator
 const container = document.querySelector('#calculator');
-container.addEventListener('click', (e) => console.log(e.target.className));
+container.addEventListener('click', e => updateDisplay(e.target));
 //Add buttons
 const addDisplay = () => new CalcButton(container, 'display', 'div', 'display', '1/-1', 1).createElement();
-const addClear = () => new CalcButton(container, 'C', 'button', 'canc', 4, 2).createElement();
-const addAllClear = () => new CalcButton(container, 'AC', 'button', 'canc', 5, 2).createElement();
-const addComma = () => new CalcButton(container, '.', 'button', 'comma', 3, 5).createElement();
-const addOperations = () => createSeveralButtons(['*', '/', '+', '-'], 4, 3, 2, 2, 'op');
-const addResult = () => new CalcButton(container, '=', 'button', 'result', '4/-1', 5).createElement();
-const addNumbers = () => createSeveralButtons([7, 8, 9, 4, 5, 6, 1, 2, 3, 0], 1, 2, 3, 3, 'number');
+const addClearBtn = () => new CalcButton(container, 'C', 'button', 'canc', 4, 2).createElement();
+const addAllClearBtn = () => new CalcButton(container, 'AC', 'button', 'canc', 5, 2).createElement();
+const addCommaBtn = () => new CalcButton(container, '.', 'button', 'comma', 3, 5).createElement();
+const addOperationsBtn = () => createSeveralButtons(['*', '/', '+', '-'], 4, 3, 2, 2, 'op');
+const addResultBtn = () => new CalcButton(container, '=', 'button', 'result', '4/-1', 5).createElement();
+const addNumbersBtn = () => createSeveralButtons([7, 8, 9, 4, 5, 6, 1, 2, 3, 0], 1, 2, 3, 3, 'number');
 const createSeveralButtons = (arr, initCol, initRow, numCols, numRows, className) => {
     return arr.map((item, index) => {
 	let col = initCol + (index % numCols);
@@ -71,9 +72,86 @@ const createSeveralButtons = (arr, initCol, initRow, numCols, numRows, className
 
 //Buttons
 const display = addDisplay();
-const clear = addClear();
-const allClear = addAllClear(); 
-const comma = addComma();
-const operations = addOperations();
-const result = addResult();
-const numbers = addNumbers();
+const clear = addClearBtn();
+const allClear = addAllClearBtn(); 
+const comma = addCommaBtn();
+const operations = addOperationsBtn();
+const result = addResultBtn();
+const numbers = addNumbersBtn();
+
+const updateDisplay = (element) => {
+    switch (element.className) {
+	case 'number':
+	    setNum(element.id);
+	    break;
+	case 'comma':
+	    setNum(addComma(display.textContent));
+	    break;
+	case 'canc':
+	    clearDisplay(element, display.textContent);
+	    break;
+	case 'op':
+	    if (opObj.op) {
+		getResult();
+	    }
+	    opObj.op = element.id;
+	    break;
+	case 'result':
+	    getResult();
+	    break;
+    }
+};
+
+const opObj = {
+    num1: '',
+    op: '',
+    num2: '',
+    res: '0'
+};
+
+const currTerm = () => {
+    return opObj.op ? 'num2' : 'num1';
+}
+
+const setNum = (value) => {
+    if(opObj[currTerm()].length < 10) {
+	opObj[currTerm()] += value;
+	display.textContent = opObj[currTerm()];
+    }
+}
+
+const getResult = () => {
+    if (!opObj.num1) {
+	opObj.num1 = opObj.res;
+	opObj.res = '0';
+    }
+    if (opObj.num2) {
+	opObj.res = operate(opObj.num1, opObj.op, opObj.num2);
+	display.textContent = opObj.res.toExponential(3);
+	[opObj.num1, opObj.op, opObj.num2] = ['', '', ''];
+    }
+}
+
+const addComma = (currNum) => {
+    if (!currNum) {
+	return '0.';
+    }
+    else if(!currNum.includes('.')) {
+	return '.';	
+    }
+    else {
+	return '';
+    }
+}
+const clearDisplay = (element, displayText) => {
+    switch (element.id) {
+	case 'C':
+	    opObj[currTerm()] = opObj[currTerm()].slice(0, -1);
+	    display.textContent = opObj[currTerm()];
+	    break;
+	case 'AC':
+	    display.textContent = '';
+	    [opObj.num1, opObj.op, opObj.num2, opObj.res] = ['', '', '', '0'];
+	    break;
+    }
+}
