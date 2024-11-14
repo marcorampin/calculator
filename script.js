@@ -88,7 +88,7 @@ const updateDisplay = (element) => {
 	    setNum(addComma(display.textContent));
 	    break;
 	case 'canc':
-	    clearDisplay(element, display.textContent);
+	    clearDisplay(element.id, display.textContent);
 	    break;
 	case 'op':
 	    if (opObj.op) {
@@ -102,6 +102,7 @@ const updateDisplay = (element) => {
     }
 };
 
+//Operation object
 const opObj = {
     num1: '',
     op: '',
@@ -127,7 +128,12 @@ const getResult = () => {
     }
     if (opObj.num2) {
 	opObj.res = operate(opObj.num1, opObj.op, opObj.num2);
-	display.textContent = opObj.res.toExponential(3);
+	if (opObj.res > 10**6 || opObj.res < 0.001) {
+	    display.textContent = opObj.res.toExponential(3);
+	}
+	else {
+	    display.textContent = Math.round(opObj.res * 10**3) / 10**3;
+	}
 	[opObj.num1, opObj.op, opObj.num2] = ['', '', ''];
     }
 }
@@ -144,7 +150,7 @@ const addComma = (currNum) => {
     }
 }
 const clearDisplay = (element, displayText) => {
-    switch (element.id) {
+    switch (element) {
 	case 'C':
 	    opObj[currTerm()] = opObj[currTerm()].slice(0, -1);
 	    display.textContent = opObj[currTerm()];
