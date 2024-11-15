@@ -128,7 +128,7 @@ const getResult = () => {
     }
     if (opObj.num2) {
 	opObj.res = operate(opObj.num1, opObj.op, opObj.num2);
-	if (opObj.res > 10**6 || opObj.res < 0.001) {
+	if (Math.abs(opObj.res) > 10**6  || (Math.abs(opObj.res) < 0.01 && Math.abs(opObj.res) > 0)) {
 	    display.textContent = opObj.res.toExponential(3);
 	}
 	else {
@@ -159,5 +159,30 @@ const clearDisplay = (element, displayText) => {
 	    display.textContent = '';
 	    [opObj.num1, opObj.op, opObj.num2, opObj.res] = ['', '', '', '0'];
 	    break;
+    }
+}
+
+//Add keyboard support
+document.addEventListener('keydown', e => keyDown(e.key));
+const keyDown = (key) => {
+    const numRegex = /\d/;
+    const opRegex = /[\*/\+-]/;
+    if (key.match(numRegex)) {
+	updateDisplay({className: 'number', id: key});
+    }
+    else if (key.match(opRegex)) {
+	updateDisplay({className: 'op', id: key});
+    }
+    else if (key === '.' || key === ',') {
+	updateDisplay({className: 'comma'});
+    }
+    else if (key === 'Enter' || key === '=') {
+	updateDisplay({className: 'result'});
+    }
+    else if (key === 'Backspace') {
+	updateDisplay({className: 'canc', id: 'C'});
+    }
+    else if (key === 'Delete') {
+	updateDisplay({className: 'canc', id: 'AC'});
     }
 }
